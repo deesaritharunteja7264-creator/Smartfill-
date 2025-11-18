@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Image Save & Print</title>
+    <style>
+        body { font-family: Arial; text-align: center; margin-top: 50px; }
+        img { max-width: 300px; display: block; margin: 10px auto; }
+        select, button, input { margin: 10px; padding: 8px; font-size: 16px; }
+    </style>
+</head>
+<body>
+    <h2>📸 Upload and Save Image</h2>
+
+    <form id="imageForm" method="POST" enctype="multipart/form-data" action="/save">
+        <input type="file" name="image" accept="image/*" id="imageInput" required><br>
+        <img id="preview" style="display:none;"><br>
+
+        <label>Select Format: </label>
+        <select name="format">
+            <option value="jpeg">JPEG</option>
+            <option value="jpg">JPG</option>
+            <option value="png">PNG</option>
+        </select><br>
+
+        <button type="submit">💾 Save Image</button>
+        <button type="button" onclick="printImage()">🖨️ Print Image</button>
+    </form>
+
+    <script>
+        const imageInput = document.getElementById('imageInput');
+        const preview = document.getElementById('preview');
+
+        imageInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file) {
+                preview.src = URL.createObjectURL(file);
+                preview.style.display = 'block';
+            }
+        });
+
+        function printImage() {
+            if (preview.src) {
+                const printWindow = window.open('', '_blank');
+                printWindow.document.write('<img src="' + preview.src + '" style="width:100%;">');
+                printWindow.print();
+            } else {
+                alert("Please select an image first!");
+            }
+        }
+    </script>
+</body>
+</html>
